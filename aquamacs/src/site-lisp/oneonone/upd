@@ -1,0 +1,11 @@
+#!/bin/sh
+
+echo "Update strings.el manually (see comment)"
+
+list="autofit-frame.el	frame-fns.el		strings.el files+.el		hexrgb.el		thingatpt+.el fit-frame.el		icomplete+.el		frame+.el	misc-fns.el frame-cmds.el		oneonone.el"
+
+
+for i in $list
+do
+curl -o $i https://www.emacswiki.org/emacs/download/$i &
+done
