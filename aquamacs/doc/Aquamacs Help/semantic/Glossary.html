@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 16.1), see www.w3.org" />
+
+  <title>Glossary - Semantic Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Semantic Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "Semantic-Internals.html#Semantic-Internals" title=
+  "Semantic Internals" />
+  <link rel="next" href=
+  "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+  title="GNU Free Documentation License" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
+This manual documents the Semantic library and utilities.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
+2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; }
+  span.sansserif { font-family:sans-serif; font-weight:normal; }
+  -->
+  /*]]>*/
+  </style>
+</head>
+
+<body>
+  <div class="node">
+    <a name="Glossary" id="Glossary"></a>
+
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU
+    Free Documentation License</a>, Previous:&nbsp;<a rel=
+    "previous" accesskey="p" href=
+    "Semantic-Internals.html#Semantic-Internals">Semantic
+    Internals</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
+
+  <h2 class="appendix">Appendix A Glossary</h2>
+
+  <dl>
+    <dt><a name="BNF" id="BNF"></a><b>BNF</b></dt>
+
+    <dd>In semantic 1.4, a BNF file represented &ldquo;Bovine
+    Normal Form&rdquo;, the grammar file used for the 1.4 parser
+    generator. This was a play on Backus-Naur Form which proved too
+    confusing.<br /></dd>
+
+    <dt><a name="bovinate" id="bovinate"></a><b>bovinate</b></dt>
+
+    <dd>A verb representing what happens when a bovine parser
+    parses a file.<br /></dd>
+
+    <dt><a name="bovine-lambda" id="bovine-lambda"></a><b>bovine
+    lambda</b></dt>
+
+    <dd>In a bovine, or LL parser, the bovine lambda is a function
+    to execute when a specific set of match rules has succeeded in
+    matching text from the buffer.<br /></dd>
+
+    <dt><a name="bovine-parser" id="bovine-parser"></a><b>bovine
+    parser</b></dt>
+
+    <dd>A parser using the bovine parser generator. It is an LL
+    parser suitible for small simple languages.<br /></dd>
+
+    <dt><a name="context" id=
+    "context"></a><b>context</b><br /></dt>
+
+    <dt><a name="LALR" id="LALR"></a><b>LALR</b><br /></dt>
+
+    <dt><a name="lexer" id="lexer"></a><b>lexer</b></dt>
+
+    <dd>A program which converts text into a stream of tokens by
+    analyzing them lexically. Lexers will commonly create strings,
+    symbols, keywords and punctuation, and strip whitespaces and
+    comments.<br /></dd>
+
+    <dt><a name="LL" id="LL"></a><b>LL</b><br /></dt>
+
+    <dt><a name="nonterminal" id=
+    "nonterminal"></a><b>nonterminal</b></dt>
+
+    <dd>A nonterminal symbol or simply a nonterminal stands for a
+    class of syntactically equivalent groupings. A nonterminal
+    symbol name is used in writing grammar rules.<br /></dd>
+
+    <dt><a name="overloadable" id=
+    "overloadable"></a><b>overloadable</b></dt>
+
+    <dd>Some functions are defined via
+    <code>define-overload</code>. These can be overloaded via
+    ....<br /></dd>
+
+    <dt><a name="parser" id="parser"></a><b>parser</b></dt>
+
+    <dd>A program that converts <b>tokens</b> to
+    <b>tags</b>.<br /></dd>
+
+    <dt><a name="tag" id="tag"></a><b>tag</b></dt>
+
+    <dd>
+      A tag is a representation of some entity in a language file,
+      such as a function, variable, or include statement. In
+      semantic, the word tag is used the same way it is used for
+      the etags or ctags tools.
+
+      <p>A tag is usually bound to a buffer region via overlay, or
+      it just specifies character locations in a file.<br /></p>
+    </dd>
+
+    <dt><a name="token" id="token"></a><b>token</b></dt>
+
+    <dd>A single atomic item returned from a lexer. It represents
+    some set of characters found in a buffer.<br /></dd>
+
+    <dt><a name="token-stream" id="token-stream"></a><b>token
+    stream</b></dt>
+
+    <dd>The output of the lexer as well as the input to the
+    parser.<br /></dd>
+
+    <dt><a name="wisent-parser" id="wisent-parser"></a><b>wisent
+    parser</b></dt>
+
+    <dd>A parser using the wisent parser generator. It is a port of
+    bison to Emacs Lisp. It is an LALR parser suitable for complex
+    languages.</dd>
+  </dl>
+</body>
+</html>

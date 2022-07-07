@@ -1,0 +1,9 @@
+This directory contains code which converts an HTML Emacs manual into
+a set of HTML files usable for Apple Help.
+
+Just run ./make-emacs-manuals.sh
+
+This will call make scripts in the Emacs manual, Emacs Lisp Reference and Misc directories
+in order to produce HTML files.
+
+These will then be collected in subfolders under ../

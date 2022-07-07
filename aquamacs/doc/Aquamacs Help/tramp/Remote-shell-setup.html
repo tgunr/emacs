@@ -1,0 +1,352 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 16.1), see www.w3.org" />
+
+  <title>Remote shell setup - TRAMP User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="TRAMP User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Configuration.html#Configuration" title=
+  "Configuration" />
+  <link rel="prev" href="Remote-Programs.html#Remote-Programs"
+  title="Remote Programs" />
+  <link rel="next" href=
+  "Windows-setup-hints.html#Windows-setup-hints" title=
+  "Windows setup hints" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; }
+  span.sansserif { font-family:sans-serif; font-weight:normal; }
+  -->
+  /*]]>*/
+  </style>
+</head>
+
+<body>
+  <div class="node">
+    <a name="Remote-shell-setup" id="Remote-shell-setup"></a>
+
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Windows-setup-hints.html#Windows-setup-hints">Windows setup
+    hints</a>, Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Remote-Programs.html#Remote-Programs">Remote Programs</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Configuration.html#Configuration">Configuration</a></p>
+    <hr />
+  </div>
+
+  <h3 class="section">4.15 Remote shell setup hints</h3>
+
+  <p><a name="index-remote-shell-setup-152" id=
+  "index-remote-shell-setup-152"></a><a name=
+  "index-g_t_0040file_007b_002eprofile_007d-file-153" id=
+  "index-g_t_0040file_007b_002eprofile_007d-file-153"></a><a name=
+  "index-g_t_0040file_007b_002elogin_007d-file-154" id=
+  "index-g_t_0040file_007b_002elogin_007d-file-154"></a><a name=
+  "index-shell-init-files-155" id="index-shell-init-files-155"></a>
+  As explained in the <a href="Overview.html#Overview">Overview</a>
+  section, <span class="sc">tramp</span> connects to the remote
+  host and talks to the shell it finds there. Of course, when you
+  log in, the shell executes its init files. Suppose your init file
+  requires you to enter the birth date of your mother; clearly
+  <span class="sc">tramp</span> does not know this and hence fails
+  to log you in to that host.</p>
+
+  <p>There are different possible strategies for pursuing this
+  problem. One strategy is to enable <span class="sc">tramp</span>
+  to deal with all possible situations. This is a losing battle,
+  since it is not possible to deal with <em>all</em> situations.
+  The other strategy is to require you to set up the remote host
+  such that it behaves like <span class="sc">tramp</span> expects.
+  This might be inconvenient because you have to invest a lot of
+  effort into shell setup before you can begin to use <span class=
+  "sc">tramp</span>.</p>
+
+  <p>The package, therefore, pursues a combined approach. It tries
+  to figure out some of the more common setups, and only requires
+  you to avoid really exotic stuff. For example, it looks through a
+  list of directories to find some programs on the remote host. And
+  also, it knows that it is not obvious how to check whether a file
+  exists, and therefore it tries different possibilities. (On some
+  hosts and shells, the command <samp><span class="command">test
+  -e</span></samp> does the trick, on some hosts the shell builtin
+  doesn't work but the program <samp><span class=
+  "command">/usr/bin/test -e</span></samp> or <samp><span class=
+  "command">/bin/test -e</span></samp> works. And on still other
+  hosts, <samp><span class="command">ls -d</span></samp> is the
+  right way to do this.)</p>
+
+  <p>Below you find a discussion of a few things that <span class=
+  "sc">tramp</span> does not deal with, and that you therefore have
+  to set up correctly.</p>
+
+  <dl>
+    <dt><var>shell-prompt-pattern</var></dt>
+
+    <dd>
+      <a name="index-shell_002dprompt_002dpattern-156" id=
+      "index-shell_002dprompt_002dpattern-156"></a> After logging
+      in to the remote host, <span class="sc">tramp</span> has to
+      wait for the remote shell startup to finish before it can
+      send commands to the remote shell. The strategy here is to
+      wait for the shell prompt. In order to recognize the shell
+      prompt, the variable <code>shell-prompt-pattern</code> has to
+      be set correctly to recognize the shell prompt on the remote
+      host.
+
+      <p>Note that <span class="sc">tramp</span> requires the match
+      for <code>shell-prompt-pattern</code> to be at the end of the
+      buffer. Many people have something like the following as the
+      value for the variable: <code>"^[^&gt;$][&gt;$] *"</code>.
+      Now suppose your shell prompt is <code>a &lt;b&gt; c $</code>
+      . In this case, <span class="sc">tramp</span> recognizes the
+      <code>&gt;</code> character as the end of the prompt, but it
+      is not at the end of the buffer.<br /></p>
+    </dd>
+
+    <dt><var>tramp-shell-prompt-pattern</var></dt>
+
+    <dd><a name="index-tramp_002dshell_002dprompt_002dpattern-157"
+    id="index-tramp_002dshell_002dprompt_002dpattern-157"></a> This
+    regular expression is used by <span class="sc">tramp</span> in
+    the same way as <code>shell-prompt-pattern</code>, to match
+    prompts from the remote shell. This second variable exists
+    because the prompt from the remote shell might be different
+    from the prompt from a local shell &mdash; after all, the whole
+    point of <span class="sc">tramp</span> is to log in to remote
+    hosts as a different user. The default value of
+    <code>tramp-shell-prompt-pattern</code> is the same as the
+    default value of <code>shell-prompt-pattern</code>, which is
+    reported to work well in many circumstances.<br /></dd>
+
+    <dt><var>tramp-password-prompt-regexp</var></dt>
+
+    <dd>
+      <a name="index-tramp_002dpassword_002dprompt_002dregexp-158"
+      id=
+      "index-tramp_002dpassword_002dprompt_002dregexp-158"></a><a name="index-tramp_002dwrong_002dpasswd_002dregexp-159"
+      id="index-tramp_002dwrong_002dpasswd_002dregexp-159"></a>
+      During login, <span class="sc">tramp</span> might be forced
+      to enter a password or a passphrase. The difference between
+      both is that a password is requested from the shell on the
+      remote host, while a passphrase is needed for accessing local
+      authentication information, like your ssh key.
+
+      <p><var>tramp-password-prompt-regexp</var> handles the
+      detection of such requests for English environments. When you
+      use another localization of your (local or remote) host, you
+      might need to adapt this. Example:</p>
+      <pre class="lisp">
+          (setq
+            tramp-password-prompt-regexp
+              (concat
+                "^.*"
+                (regexp-opt
+                  '("passphrase" "Passphrase"
+                    ;; English
+                    "password" "Password"
+                    ;; Deutsch
+                    "passwort" "Passwort"
+                    ;; Fran&ccedil;ais
+                    "mot de passe" "Mot de passe") t)
+                ".*:? *"))
+</pre>
+
+      <p>In parallel, it might also be necessary to adapt
+      <var>tramp-wrong-passwd-regexp</var>.<br /></p>
+    </dd>
+
+    <dt><samp><span class="command">tset</span></samp> and other
+    questions</dt>
+
+    <dd>
+      <a name="index-Unix-command-tset-160" id=
+      "index-Unix-command-tset-160"></a><a name=
+      "index-tset-Unix-command-161" id=
+      "index-tset-Unix-command-161"></a> Some people invoke the
+      <samp><span class="command">tset</span></samp> program from
+      their shell startup scripts which asks the user about the
+      terminal type of the shell. Maybe some shells ask other
+      questions when they are started. <span class=
+      "sc">tramp</span> does not know how to answer these
+      questions. There are two approaches for dealing with this
+      problem. One approach is to take care that the shell does not
+      ask any questions when invoked from <span class=
+      "sc">tramp</span>. You can do this by checking the
+      <code>TERM</code> environment variable, it will be set to
+      <code>dumb</code> when connecting.
+
+      <p><a name="index-tramp_002dterminal_002dtype-162" id=
+      "index-tramp_002dterminal_002dtype-162"></a>The variable
+      <code>tramp-terminal-type</code> can be used to change this
+      value to <code>dumb</code>.</p>
+
+      <p><a name="index-tramp_002dactions_002dbefore_002dshell-163"
+      id="index-tramp_002dactions_002dbefore_002dshell-163"></a>The
+      other approach is to teach <span class="sc">tramp</span>
+      about these questions. See the variable
+      <code>tramp-actions-before-shell</code>. Example:</p>
+      <pre class="lisp">
+          (defconst my-tramp-prompt-regexp
+            (concat (regexp-opt '("Enter the birth date of your mother:") t)
+                    "\\s-*")
+            "Regular expression matching my login prompt question.")
+
+          (defun my-tramp-action (proc vec)
+            "Enter \"19000101\" in order to give a correct answer."
+            (save-window-excursion
+              (with-current-buffer (tramp-get-connection-buffer vec)
+                (tramp-message vec 6 "\n%s" (buffer-string))
+                (tramp-send-string vec "19000101"))))
+
+          (add-to-list 'tramp-actions-before-shell
+                       '(my-tramp-prompt-regexp my-tramp-action))
+</pre><br />
+    </dd>
+
+    <dt>Environment variables named like users in
+    <samp><span class="file">.profile</span></samp></dt>
+
+    <dd>
+      If you have a user named frumple and set the variable
+      <code>FRUMPLE</code> in your shell environment, then this
+      might cause trouble. Maybe rename the variable to
+      <code>FRUMPLE_DIR</code> or the like.
+
+      <p>This weird effect was actually reported by a <span class=
+      "sc">tramp</span> user!<br /></p>
+    </dd>
+
+    <dt>Non-Bourne commands in <samp><span class=
+    "file">.profile</span></samp></dt>
+
+    <dd>
+      After logging in to the remote host, <span class=
+      "sc">tramp</span> issues the command <samp><span class=
+      "command">exec /bin/sh</span></samp>. (Actually, the command
+      is slightly different.) When <samp><span class=
+      "command">/bin/sh</span></samp> is executed, it reads some
+      init files, such as <samp><span class=
+      "file">~/.shrc</span></samp> or <samp><span class=
+      "file">~/.profile</span></samp>.
+
+      <p>Now, some people have a login shell which is not
+      <code>/bin/sh</code> but a Bourne-ish shell such as bash or
+      ksh. Some of these people might put their shell setup into
+      the files <samp><span class="file">~/.shrc</span></samp> or
+      <samp><span class="file">~/.profile</span></samp>. This way,
+      it is possible for non-Bourne constructs to end up in those
+      files. Then, <samp><span class="command">exec
+      /bin/sh</span></samp> might cause the Bourne shell to barf on
+      those constructs.</p>
+
+      <p>As an example, imagine somebody putting <samp><span class=
+      "command">export FOO=bar</span></samp> into the file
+      <samp><span class="file">~/.profile</span></samp>. The
+      standard Bourne shell does not understand this syntax and
+      will emit a syntax error when it reaches this line.</p>
+
+      <p>Another example is the tilde (<code>~</code>) character,
+      say when adding <samp><span class="file">~/bin</span></samp>
+      to <code>PATH</code>. Many Bourne shells will not expand this
+      character, and since there is usually no directory whose name
+      consists of the single character tilde, strange things will
+      happen.</p>
+
+      <p>What can you do about this?</p>
+
+      <p>Well, one possibility is to make sure that everything in
+      <samp><span class="file">~/.shrc</span></samp> and
+      <samp><span class="file">~/.profile</span></samp> on all
+      remote hosts is Bourne-compatible. In the above example,
+      instead of <samp><span class="command">export
+      FOO=bar</span></samp>, you might use <samp><span class=
+      "command">FOO=bar; export FOO</span></samp> instead.</p>
+
+      <p>The other possibility is to put your non-Bourne shell
+      setup into some other files. For example, bash reads the file
+      <samp><span class="file">~/.bash_profile</span></samp>
+      instead of <samp><span class="file">~/.profile</span></samp>,
+      if the former exists. So bash aficionados just rename their
+      <samp><span class="file">~/.profile</span></samp> to
+      <samp><span class="file">~/.bash_profile</span></samp> on all
+      remote hosts, and Bob's your uncle.</p>
+
+      <p>The <span class="sc">tramp</span> developers would like to
+      circumvent this problem, so if you have an idea about it,
+      please tell us. However, we are afraid it is not that simple:
+      before saying <samp><span class="command">exec
+      /bin/sh</span></samp>, <span class="sc">tramp</span> does not
+      know which kind of shell it might be talking to. It could be
+      a Bourne-ish shell like ksh or bash, or it could be a csh
+      derivative like tcsh, or it could be zsh, or even rc. If the
+      shell is Bourne-ish already, then it might be prudent to omit
+      the <samp><span class="command">exec /bin/sh</span></samp>
+      step. But how to find out if the shell is
+      Bourne-ish?<br /></p>
+    </dd>
+
+    <dt>Interactive shell prompt</dt>
+
+    <dd>
+      <span class="sc">tramp</span> redefines the shell prompt in
+      order to parse the shell's output robustly. When calling an
+      interactive shell by <kbd>M-x shell</kbd>, this doesn't look
+      nice.
+
+      <p>You can redefine the shell prompt by checking the
+      environment variable <code>INSIDE_EMACS</code>, which is set
+      by <span class="sc">tramp</span>, in your startup script
+      <samp><span class="file">~/.emacs_SHELLNAME</span></samp>.
+      <code>SHELLNAME</code> might be the string <code>bash</code>
+      or similar, in case of doubt you could set it the environment
+      variable <code>ESHELL</code> in your <samp><span class=
+      "file">.emacs</span></samp>:</p>
+      <pre class="lisp">
+          (setenv "ESHELL" "bash")
+</pre>
+
+      <p>Your file <samp><span class=
+      "file">~/.emacs_SHELLNAME</span></samp> could contain code
+      like</p>
+      <pre class="example">
+          # Reset the prompt for remote Tramp shells.
+          if [ "${INSIDE_EMACS/*tramp*/tramp}" == "tramp" ] ; then
+             PS1="[\u@\h \w]$ "
+          fi
+</pre>
+    </dd>
+  </dl>
+</body>
+</html>

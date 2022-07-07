@@ -1,0 +1,39 @@
+#!/bin/sh
+
+P=`pwd`
+
+echo "convert-emacs-misc"
+# echo "Give path to manual, e.g. ./convert-emacs-misc ~/Projects/emacs/elisp/manual"
+
+rm -r /tmp/emanual 2>/dev/null
+
+echo "Using $1 as input file."
+cd "$1"
+rm -r *.html
+make html HTML_OPTS='--html'  # avoid the "--no-split".  HTML_OPTS must be defined with :=
+mkdir /tmp/emanual
+cp -r *.html /tmp/emanual
+cd /tmp/emanual
+
+
+cp $P/manual-sources/aquamacs.css /tmp/emanual/
+
+cp $P/manual-sources/gnu-head-sm.jpg /tmp/emanual/
+
+# contains OS X specific information now - don't delete any more
+#rm /tmp/emanual/Mac-*.html /tmp/emanual/Windows-*.html
+# leave Windows info for now
+
+
+perl -i -p -e 's/<\/head>/<link rel="stylesheet" href="aquamacs.css" type="text\/css" \/><\/head>/i' /tmp/emanual/*.html
+
+
+$P/convert-emacs-manual-pages /tmp/emanual/*.html
+version=`$P/convert-emacs-reference-title /tmp/emanual/index.html`
+# sed 's|<body>|<body><a name="EmacsLispReferenceIndex"></a>|'  </tmp/emanual/index.html >/tmp/emanual/index2.html
+#mv /tmp/emanual/index2.html /tmp/emanual/index.html
+
+echo $version >/tmp/emanual/VERSION
+
+rm -r "$P"/../"Aquamacs Help"/"misc"
+mv /tmp/emanual $P/../"Aquamacs Help"/"misc"

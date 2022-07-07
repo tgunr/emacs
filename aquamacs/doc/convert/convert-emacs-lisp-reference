@@ -1,0 +1,49 @@
+#!/bin/sh
+
+P=`pwd`
+
+echo "convert-emacs-lisp-reference"
+#echo "Give path to manual, e.g. ./convert-emacs-lisp-reference ~/Projects/emacs/elisp/manual"
+
+rm -r /tmp/emanual 2>/dev/null
+
+echo "Using $1 as input file."
+cd "$1"
+rm -r elisp.html
+make html HTML_OPTS='--html'  # avoid the "--no-split".  HTML_OPTS must be defined with :=
+
+cp -r elisp.html /tmp/emanual/
+cp elisp.html/index.html /tmp/manual.html # needed for GNU head / last change
+cd /tmp/emanual
+
+
+
+cp $P/manual-sources/aquamacs.css /tmp/emanual/
+
+cp $P/manual-sources/gnu-head-sm.jpg /tmp/emanual/
+
+# contains OS X specific information now - don't delete any more
+#rm /tmp/emanual/Mac-*.html /tmp/emanual/Windows-*.html
+# leave Windows info for now
+
+echo "Setting stylesheet"
+perl -i -p -e 's/<\/head>/<link rel="stylesheet" href="aquamacs.css" type="text\/css" \/><\/head>/i' /tmp/emanual/*.html
+
+echo "convert manual pages"
+$P/convert-emacs-manual-pages /tmp/emanual/*.html
+# version=`$P/convert-emacs-reference-title /tmp/emanual/index.html`
+echo "sed"
+sed -E 's|<body([^>]*)>|<body\1><a name="EmacsLispReferenceIndex"></a>|'  </tmp/emanual/index.html >/tmp/emanual/index2.html
+mv /tmp/emanual/index2.html /tmp/emanual/index.html
+
+echo $version >/tmp/emanual/VERSION
+
+$P/tidy_dir.sh
+
+echo "Moving temp folder"
+
+rm -r "$P"/../"Aquamacs Help"/"EmacsLispReference"
+mv /tmp/emanual $P/../"Aquamacs Help"/"EmacsLispReference"
+# AppleHelpViewer has trouble when folders have spaces in their names.
+
+#hiutil -C -g -s en -a -f $P/../"EmacsLispReference/EmacsLispReference.helpindex" $P/../"EmacsLispReference"
